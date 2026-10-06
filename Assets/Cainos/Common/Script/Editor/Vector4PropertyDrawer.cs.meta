@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 392668fb96b08bf4ea568e9fe810b3eb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177945
+  packageName: Customizable Pixel Character
+  packageVersion: 2.4.8
+  assetPath: Assets/Cainos/Common/Script/Editor/Vector4PropertyDrawer.cs
+  uploadId: 1001166

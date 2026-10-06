@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2f239c8855a226e4d8acf72ecfce0291
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177945
+  packageName: Customizable Pixel Character
+  packageVersion: 2.4.8
+  assetPath: Assets/Cainos/Interactive Pixel Water/Script/PixelWaterBubble.cs
+  uploadId: 1001166

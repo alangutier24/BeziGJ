@@ -1,0 +1,461 @@
+using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
+
+public class Cop : MonoBehaviour
+{
+
+    private NavMeshAgent agent;
+
+    [SerializeField]
+    private SpriteRenderer sr;
+
+    [SerializeField]
+    private Sprite side;
+
+    [SerializeField]
+    private Transform[] waypoints;
+
+    [SerializeField]
+    private float viewRange = 7f;
+    
+    [SerializeField]
+    private float halfFovAngle = 35f;
+
+    [SerializeField]
+    private float catchDistance = 0.7f;
+    
+    [SerializeField]
+    private float wanderRadius = 7f;
+
+    [SerializeField]
+    private float eyeHeight = 1f;
+
+    [SerializeField]
+    private float targetHeight = 0.5f;
+
+    [SerializeField]
+    private LayerMask obstacleMask;
+
+    [SerializeField]
+    private LayerMask playerLayer;
+
+    [SerializeField]
+    private SpriteRenderer exclamationMark;
+
+    [SerializeField]
+    private Transform player;
+
+    [SerializeField]
+    private NavMeshPath navMesh;
+
+    private int wayPointIndex = 0;
+
+    [SerializeField]
+    private float sightTimer = 0f;
+
+    private Transform currentTarget;
+
+    public bool CanSeeTarget = false;
+
+    public bool PlayerInRange = false;
+
+    public bool Sus = false;
+
+    private float timerMultiplier = 3f;
+
+    private Vector3 targetPoint;
+
+    private bool searchMode = false;
+
+    [SerializeField] float replanInterval = 0.15f;
+    [SerializeField] float replanMoveThreshold = 1.5f;
+
+    Vector3 lastPlannedPos;
+    float replanTimer;
+
+    private enum CopState
+    {
+        Patrol, 
+        Pursue,
+        Search,
+        Catch
+    }
+
+    [SerializeField]
+    private CopState copState = CopState.Patrol;
+
+    void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        Debug.Log($"Awake ran on {name}, GetComponent returned: {agent}", this);
+        CharacterController cc = player.GetComponent<CharacterController>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        navMesh = new NavMeshPath();
+        targetPoint = player.TransformPoint(cc.center);
+    }
+
+    void Start()
+    {
+        agent.speed = 2f;
+        agent.angularSpeed = 120f;
+        agent.acceleration = 8f;
+        agent.stoppingDistance = catchDistance;
+        agent.updateRotation = false;
+        agent.updateUpAxis  = true;  
+
+        currentTarget = waypoints[wayPointIndex];
+
+        copState = CopState.Patrol;
+
+        exclamationMark.enabled = false;
+
+        lastPlannedPos = player.position;
+
+        setNextWaypointPosition();
+
+    }
+
+    void Update()
+    {
+        PlayerFound();
+        switch(copState)
+        {
+            case CopState.Patrol:
+                Patrol();
+            break;
+            case CopState.Pursue:
+                Pursue();
+            break;
+            case CopState.Search:
+                SearchArea();
+            break;
+            case CopState.Catch:
+                Debug.Log("Catch");
+                CatchPlayer();
+            break;
+            default:
+                Patrol();
+            break;
+        }
+
+        UnstickAgent();
+
+        if (CanSeeTarget)
+        {
+            FaceTarget(player.position, 360f); // rotate to look at player
+            Debug.Log("Player");
+        }
+        else
+        {
+            FaceMovement();    
+             Debug.Log("Waypoint");
+        }
+  
+    }
+
+    void Move(Vector3 destination)
+    {
+        agent.SetDestination(destination);
+        switch (agent.pathStatus)
+        {
+            case NavMeshPathStatus.PathComplete:  
+            break;// path reaches the destination
+            case NavMeshPathStatus.PathPartial:  
+                Debug.Log("Path Partial!");
+            break; // path found, but stops short (blocked / target off-mesh)
+            case NavMeshPathStatus.PathInvalid: 
+                Debug.Log("Path Invalid!");
+            break;  // no valid path
+        }
+    }
+    
+    static readonly Quaternion RightOffset = Quaternion.Euler(0f, -90f, 0f);
+    
+    void FaceMovement()
+    {
+        Vector3 v = agent.velocity;
+        v.y = 0f;
+        if (v.sqrMagnitude < 0.01f) return; // keep last facing when idle
+        
+        float h = v.x;
+        float depth = v.z;
+
+        if (Mathf.Abs(h) > Mathf.Abs(depth))
+        {
+            sr.sprite = side;
+            sr.flipX = h < 0f;
+        }
+        
+        transform.rotation = Quaternion.LookRotation(v) * RightOffset ;
+    }
+
+    void FaceTarget(Vector3 targetPos, float turnSpeed)
+    {
+        Vector3 dir = targetPos - transform.position;
+        dir.y = 0f;
+
+        if (dir.sqrMagnitude < 0.0001f) return;
+
+        Quaternion target = Quaternion.LookRotation(dir) * RightOffset ;
+
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation, target, turnSpeed * Time.deltaTime);
+    }
+
+    void SearchArea()
+    {
+
+        if(sightTimer > 0 && Vector3.Distance(agent.transform.position, currentTarget.position) < catchDistance)
+        {
+            searchMode = true;
+        }
+
+        if(sightTimer > 0 && !searchMode)
+        {
+            Vector3 randomPoint = transform.position + Random.insideUnitSphere * wanderRadius;
+            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
+            {
+                currentTarget = transform;
+                exclamationMark.enabled = true;
+                exclamationMark.transform.parent.gameObject.transform.position = randomPoint;
+                agent.CalculatePath(currentTarget.position, navMesh);
+                if (navMesh.status == NavMeshPathStatus.PathComplete)
+                {
+                    Move(hit.position);
+                }
+                else
+                 {
+                    sightTimer = 0;
+                    copState = CopState.Patrol;
+                 }
+              
+            }
+            searchMode = false;
+        }
+
+        if(sightTimer <= 0)
+        {
+            sightTimer = 0;
+            copState = CopState.Patrol;
+        }
+
+        
+    }
+
+    void CatchPlayer()
+    {
+        //TODO restart level
+        Debug.Log("Player Caught");
+    }
+
+    void Pursue()
+    {
+        //replanTimer -= Time.deltaTime;
+
+        //bool targetMoved = (player.position - lastPlannedPos).sqrMagnitude
+        //                > replanMoveThreshold * replanMoveThreshold;
+
+        //if (replanTimer <= 0f || targetMoved)
+        {
+            agent.SetDestination(player.position);
+            lastPlannedPos = player.position;
+            replanTimer = replanInterval;
+        }
+        /*
+        if(currentTarget != player)
+        {
+            Debug.Log("Target set to player");
+            agent.ResetPath();
+            currentTarget = player;
+            Move(currentTarget.position);
+        }
+        */
+        if(inRange())
+        {
+            CatchPlayer();
+        }
+    }
+
+    bool inRange()
+    {
+        if(Vector3.Distance(agent.transform.position, currentTarget.position) < catchDistance)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    void Patrol()
+    {
+        if (!agent.hasPath && !agent.pathPending)
+        {
+            setNextWaypointPosition();
+        }
+        if(Vector3.Distance(agent.transform.position, currentTarget.position) < catchDistance)
+        {
+            setNextWaypointPosition();
+        }
+    }
+
+    bool IsInMask(int layer, LayerMask mask) => (mask.value & (1 << layer)) != 0;
+
+    bool PlayerFound()
+    {
+
+        copState = CopState.Patrol;
+        // Search for him distance based
+        if(Vector3.Distance(player.position, transform.position) > viewRange)
+        {
+            PlayerInRange = false;
+            CanSeeTarget = false;
+            Sus = false;
+
+            if(sightTimer > 0)
+            {
+                Sus = true;
+                copState = CopState.Search;
+
+                sightTimer -= Time.deltaTime;
+                sightTimer = Mathf.Max(0, sightTimer);
+            }
+
+            return false;
+        }
+
+         if(sightTimer > 0)
+        {
+            copState = CopState.Search;
+            sightTimer -= Time.deltaTime;
+            sightTimer = Mathf.Max(0, sightTimer);
+        }
+        //Player in radius of range
+        PlayerInRange = true;
+
+        Vector3 origin = transform.position + Vector3.up * eyeHeight;
+        Vector3 targetPoint = player.position + Vector3.up * targetHeight;
+        Vector3 dir = (targetPoint - origin).normalized;
+        float cosAngle = Vector3.Dot(transform.right, dir);
+        if(cosAngle < Mathf.Cos(halfFovAngle * Mathf.Deg2Rad))
+        {
+            CanSeeTarget = false;
+            return false;
+        }
+
+        //Player in sight
+        float distance = Vector3.Distance(origin, targetPoint);
+
+        Debug.DrawRay(origin, dir * distance, Color.red, 0.1f);
+        int mask = playerLayer | obstacleMask;
+        if(Physics.Raycast(origin, dir, out RaycastHit hit, distance, mask))
+        {
+            if (IsInMask(hit.collider.gameObject.layer, playerLayer))
+            {
+                CanSeeTarget = true;
+                copState = CopState.Pursue;
+                sightTimer += Time.deltaTime * timerMultiplier;
+            }
+
+            if (IsInMask(hit.collider.gameObject.layer, obstacleMask))
+            {
+                copState = CopState.Search;
+                sightTimer -= Time.deltaTime;
+            }
+
+        }
+        return true;
+
+    }
+
+    void DrawGizmoCircle(Vector3 center, float radius, int segments = 48)
+    {
+        float step = 2f * Mathf.PI / segments;
+        Vector3 prev = center + new Vector3(radius, 0, 0); // plano XZ
+        for (int i = 1; i <= segments; i++)
+        {
+            float a = step * i;
+            Vector3 next = center + new Vector3(Mathf.Cos(a) * radius, 0, Mathf.Sin(a) * radius);
+            Gizmos.DrawLine(prev, next);
+            prev = next;
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = CanSeeTarget ? Color.red : Color.yellow;
+
+        // bordes del cono
+        Vector3 left  = Quaternion.Euler(0, -halfFovAngle * 0.5f, 0) * transform.right;
+        Vector3 right = Quaternion.Euler(0,  halfFovAngle * 0.5f, 0) * transform.right;
+        Gizmos.DrawRay(transform.position, left  * viewRange);
+        Gizmos.DrawRay(transform.position, right * viewRange);
+
+        // arco del rango
+        UnityEditor.Handles.color = CanSeeTarget ? Color.red : Color.green;
+        //Point to player when possible
+        if (CanSeeTarget)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, player.position);
+        }
+
+        if(PlayerInRange && !CanSeeTarget)
+        {
+            Gizmos.color = Color.purple;
+            UnityEditor.Handles.color = Color.purple;
+        }
+
+        if(Sus && !CanSeeTarget)
+        {
+            UnityEditor.Handles.color = Color.orange;
+        }
+
+        UnityEditor.Handles.DrawSolidArc(transform.position, Vector3.up,
+        left, halfFovAngle, viewRange);          
+        DrawGizmoCircle(transform.position, viewRange);
+    }
+
+    void InformNearestCop()
+    {
+        
+    }
+
+    void setNextWaypointPosition()
+    {
+        wayPointIndex += 1;
+        wayPointIndex %= waypoints.Length;
+
+        currentTarget = waypoints[wayPointIndex].transform;
+
+        Move(currentTarget.position);
+        //StartCoroutine(StallThenMove(currentTarget.position, 2.5f));
+
+        return;
+    }
+
+    IEnumerator StallThenMove(Vector3 nextTarget, float stallTime)
+    {
+        agent.isStopped = true;
+        yield return new WaitForSeconds(stallTime);
+        agent.isStopped = false;
+        Move(nextTarget);
+    }
+
+    void UnstickAgent()
+    {
+        switch (agent.pathStatus)
+        {
+            case NavMeshPathStatus.PathComplete:  
+            break;// path reaches the destination
+            case NavMeshPathStatus.PathPartial:  
+                Debug.Log("Path Partial!");
+                setNextWaypointPosition();
+            break; // path found, but stops short (blocked / target off-mesh)
+            case NavMeshPathStatus.PathInvalid:
+                setNextWaypointPosition(); 
+                Debug.Log("Path Invalid!");
+            break;  // no valid path
+        }
+    }
+
+}

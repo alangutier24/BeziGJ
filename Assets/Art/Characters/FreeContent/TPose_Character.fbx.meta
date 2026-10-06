@@ -1,0 +1,200 @@
+fileFormatVersion: 2
+guid: 348114de5b0d747cea8243ba410f1c62
+ModelImporter:
+  serializedVersion: 24200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_0_L_Foot_5_palette1
+    second: {fileID: 2100000, guid: db13e2ad46992492480625a3e65a1703, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_10_Spine2_7_palette1
+    second: {fileID: 2100000, guid: 42c7e6cb9e04c40a1badd581182a6904, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_11_Spine1_7_palette1
+    second: {fileID: 2100000, guid: b2ebc531bd9bf4078b9eb93482c7356a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_12_R_Thigh_4_palette1
+    second: {fileID: 2100000, guid: fb3836f5694b84881a4a68163b71d11d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_13_L_Arm_5_palette1
+    second: {fileID: 2100000, guid: 2c0e1964c9c7448549d1995a87ea46ad, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_14_L_Hand_5_palette1
+    second: {fileID: 2100000, guid: 91069856a03cb498e92992667b954409, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_15_L_ForeArm_5_palette1
+    second: {fileID: 2100000, guid: 8fba0d98c4be14aca8dcb1d6a1b7bffe, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_16_Head_palette1
+    second: {fileID: 2100000, guid: ae8c2fe77a8564cc7a4a320e141fb396, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_17_Spine3_8_palette1
+    second: {fileID: 2100000, guid: d76c2c13ec02c48cb8582b54da9ec04e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_1_L_Calf_5_palette1
+    second: {fileID: 2100000, guid: ce8ea748555194cd3900bc9b3fffbaf3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_2_L_Thigh_5_palette1
+    second: {fileID: 2100000, guid: 51605e746e0c44b66a00cd85d3770f67, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_3_R_Foot_4_palette1
+    second: {fileID: 2100000, guid: 1b9045d902af849c9a5afc4b86c71a6f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_4_R_Calf_5_palette1
+    second: {fileID: 2100000, guid: 80b8a33c4c2454a14820d393caf880e5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_5_R_Arm_5_palette1
+    second: {fileID: 2100000, guid: 1879262af25e64ca8ae66751324ef5e6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_6_R_Hand_5_palette1
+    second: {fileID: 2100000, guid: dda3682177f984cb4bfe6ed86d37c536, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_7_R_ForeArm_5_palette1
+    second: {fileID: 2100000, guid: 46382db6a19634b58a51360c09215d68, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_8_Cape_End_palette1
+    second: {fileID: 2100000, guid: a667c0326acd648d6b652483e1035a7e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DungeonCrawler_Character_002_9_Cape_Mid_palette1
+    second: {fileID: 2100000, guid: 05236c66a47ce4047929476f7c07fd99, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

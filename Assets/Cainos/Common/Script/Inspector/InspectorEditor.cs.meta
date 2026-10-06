@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 9fe04a105976442fb69398dec78bdc76
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177945
+  packageName: Customizable Pixel Character
+  packageVersion: 2.4.8
+  assetPath: Assets/Cainos/Common/Script/Inspector/InspectorEditor.cs
+  uploadId: 1001166
